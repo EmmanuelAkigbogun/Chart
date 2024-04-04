@@ -27,7 +27,7 @@ function ChartBoard({ state}) {
   ]);
   let datax = useRef([]);
   let data = useRef([100, 204, 205, 420, 500, 680, 106]);
-  let difference = useRef(100);
+  let difference = useRef(1000);
   let lowest = useRef(0);
   let divisor = useRef(4);
   let constantbottom = useRef(0);
@@ -71,7 +71,7 @@ function ChartBoard({ state}) {
   let chatwi = useRef(20);
   useEffect(() => {
     inputfx();
-  }, []);
+  }, [state]);
   let canvas = useRef(null);
   let [cxt, setcxt] = useState(canvas?.current?.getContext("2d"));
   let [gradient, setgradient] = useState([]);
@@ -79,11 +79,13 @@ function ChartBoard({ state}) {
   let inputfx = () => {
     setcxt((cxt = canvas.current.getContext("2d")));
     if (state == "yearly") {
-      for (let index = 0; index < 10; index++) {
+      for (let index = 0; index < 7; index++) {
         yearly.current[index] = new Date().getFullYear() - index;
       }
       yearly.current = yearly.current.reverse();
     }
+       console.log(state);
+
         state == "weekly"
           ? (datax.current = weekly.current)
           : state == "monthly"
@@ -91,6 +93,7 @@ function ChartBoard({ state}) {
           : state == "yearly"
           ? (datax.current = yearly.current)
           : "";
+        
     rangefx();
     tryhover();
   };
@@ -904,7 +907,7 @@ function ChartBoard({ state}) {
       : state == "monthly"
       ? (hoverType = "new Date().getMonth()")
       : state == "yearly"
-      ? (hoverType = "datax.current[new Date().getFullYear()]")
+      ? (hoverType = "datax.current.indexOf(new Date().getFullYear())")
       : "";
     eval(`
     hover(

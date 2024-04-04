@@ -78,13 +78,7 @@ function Chart() {
   let [gradient1, setgradient1] = useState([]);
   let setupfx = () => {
     setcxt((cxt = canvas.current.getContext("2d")));
-        state == "day"
-          ? (datax.current = day.current)
-          : state == "month"
-          ? (datax.current = month.current)
-          : state == "year"
-          ? (datax.current = year.current)
-          : "";
+         datax.current = day.current
     rangefx();
     barChart(true, true);
     tryhover();
