@@ -84,7 +84,13 @@ function ChartBoard({ state}) {
       }
       yearly.current = yearly.current.reverse();
     }
-    eval(`datax.current=${state}.current`);
+        state == "weekly"
+          ? (datax.current = weekly.current)
+          : state == "monthly"
+          ? (datax.current = monthly.current)
+          : state == "yearly"
+          ? (datax.current = yearly.current)
+          : "";
     rangefx();
     tryhover();
   };
