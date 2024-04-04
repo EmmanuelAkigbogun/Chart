@@ -25,7 +25,7 @@ function DetailsTable() {
               <td>
                 <p className="gap-10 row align-center table-bold">
                   <img src={files.profile1} alt="profile1" />
-                Akigbogun Emmanuel Ibukun
+                Akigbogun Emmanuel
                 </p>
               </td>
               <td>Nov 15, 2023</td>
