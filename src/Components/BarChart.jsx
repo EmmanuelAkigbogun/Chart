@@ -15,7 +15,7 @@ function BarChart() {
                 setState((state = e.target.value));
               }}
               value={state}
-              className="padding-6-12 border-rad-20 gray-border"
+              className="padding-6-12 border-rad-20 gray-border white-bg"
             >
               <option value="weekly">weekly</option>
               <option value="monthly">monthly</option>
