@@ -17,8 +17,8 @@ function BarChart() {
               value={state}
               className="padding-6-12 border-rad-20 gray-border"
             >
-              <option value="monthly">monthly</option>
               <option value="weekly">weekly</option>
+              <option value="monthly">monthly</option>
               <option value="yearly">yearly</option>
             </select>
           </section>

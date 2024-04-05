@@ -1,8 +1,7 @@
 import { useState } from "react";
 import files from "../assets/files";
 import Dates from "./Dates";
-function Nav() {
-  let [hamburger, setHamburger] = useState("");
+function Nav({hamburger,setHamburger}) {
   let handleClick = () => {
     setHamburger((hamburger = "open"));
   };
@@ -18,12 +17,19 @@ function Nav() {
         id="nava"
       >
         <section
+          className={`j-center align-center gray-bg fixed padding-top-20 padding-bottom-20 logo bordertrans ${
+            hamburger == "open" ? "none" : ""
+          }`}
+        >
+          <img src={files.logo} alt="logo" className="icon-40 icon-40to24" />
+        </section>
+        <section
           className={`${
             hamburger == "open" && "flex-1155 pointer"
           } align-center none close`}
           onClick={handleClose}
         >
-          <img src={files.close} alt="close" className="icon-40"/>
+          <img src={files.close} alt="close" className="icon-40" />
         </section>
         <section
           className={` ${

@@ -69,6 +69,7 @@ function ChartBoard({ state}) {
   let precision = useRef(2);
   let chathi = useRef(10);
   let chatwi = useRef(20);
+  let roundheight = useRef(15);
   useEffect(() => {
     inputfx();
   }, [state]);
@@ -684,7 +685,7 @@ function ChartBoard({ state}) {
             constantleft.current,
           canvas.current.height -
             constantbottom.current -
-            (e * scaley.current + yoriginbottom.current),
+            (e * scaley.current + yoriginbottom.current)+roundheight.current,
           i * (gap.current + wid.current) +
             fgap.current +
             chartbeginx.current +
@@ -694,7 +695,8 @@ function ChartBoard({ state}) {
           canvas.current.height -
             constantbottom.current -
             (e * scaley.current + yoriginbottom.current) +
-            e * scaley.current
+            e * scaley.current -
+            roundheight.current
         ))
       );
       //gradient.addColorStop(0,"rgb(23,74,97)")
@@ -709,9 +711,10 @@ function ChartBoard({ state}) {
           constantleft.current,
         canvas.current.height -
           constantbottom.current -
-          (e * scaley.current + yoriginbottom.current),
+          (e * scaley.current + yoriginbottom.current) +
+          roundheight.current,
         wid.current,
-        e * scaley.current
+        e * scaley.current - roundheight.current
       );
 
       cxt.rect(
@@ -722,9 +725,10 @@ function ChartBoard({ state}) {
           constantleft.current,
         canvas.current.height -
           constantbottom.current -
-          (e * scaley.current + yoriginbottom.current),
+          (e * scaley.current + yoriginbottom.current) +
+          roundheight.current,
         wid.current,
-        e * scaley.current
+        e * scaley.current - roundheight.current
       );
       //click check
       if (cxt.isPointInPath(xax, yax)) {
@@ -741,8 +745,9 @@ function ChartBoard({ state}) {
       datayy.current[i] =
         canvas.current.height -
         constantbottom.current -
-        (e * scaley.current + yoriginbottom.current);
-      datayh.current[i] = e * scaley.current;
+        (e * scaley.current + yoriginbottom.current) +
+        roundheight.current;
+      datayh.current[i] = e * scaley.current - roundheight.current;
         roundTop(i, xax, yax, gradient);
     });
   };
@@ -809,6 +814,7 @@ function ChartBoard({ state}) {
     //bars
     bars(xax, yax);
     //text x axiz
+    shadowoff();
     textxfx();
     //text y axiz
     textyfx();

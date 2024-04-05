@@ -1,7 +1,7 @@
 import { useState } from "react";
 import files from "../assets/files";
 import SideBarIcon from "./SideBarIcon";
-function SideBar() {
+function SideBar({hamburger}) {
   let [state, setSate] = useState("category");
   let [toggle,setToggle]=useState("light")
   let handleClick=(e)=>{
@@ -10,7 +10,11 @@ function SideBar() {
   }
   return (
     <>
-      <section className="side-bar fixed">
+      <section
+        className={`side-bar fixed ${
+          hamburger == "open" ? "" : "none-800"
+        }`}
+      >
         <section className="side-bar-child space-between gap-154 column scroll-height">
           <section className="j-center align-center gray-bg fixed padding-top-20 padding-bottom-20 logo">
             <img src={files.logo} alt="logo" className="icon-40" />
