@@ -28,7 +28,7 @@ function ChartBoard({ state}) {
   let datax = useRef([]);
   let data = useRef([100, 204, 205, 420, 500, 680, 106]);
   let difference = useRef(400);
-  let lowest = useRef(0);
+  let lowest = useRef(20);
   let divisor = useRef(4);
   let constantbottom = useRef(0);
   let constantleft = useRef(0);
@@ -69,7 +69,7 @@ function ChartBoard({ state}) {
   let precision = useRef(2);
   let chathi = useRef(10);
   let chatwi = useRef(20);
-  let roundheight = useRef(15);
+  let roundheight = useRef(10);
   useEffect(() => {
     inputfx();
   }, [state]);
