@@ -687,12 +687,17 @@ table {
   .logo {
     padding-block: 10px;
   }
+  .bordertrans{
+      border-right: 1px solid transparent;
+  }
+
   .mid-side-bar {
     margin-block-start: 60px;
   }
   .section-padding {
     margin-top: 64px;
-    padding-inline: calc(var(--sidebar-width) + 10px) 10px;
+    padding-inline:10px;
+    /*padding-inline: calc(var(--sidebar-width) + 10px) 10px;*/
   }
   .gap-10-800 {
     gap: 10px;
@@ -720,13 +725,12 @@ table {
   .section-padding {
     margin-top: 48px;
   }
+    .icon-40to24{
+    width: 24px;
+    height: 24px;
+  }
 }
 @media screen and (max-width: 400px) {
-  td:nth-child(1) p {
-    flex-direction: column-reverse;
-    display: flex;
-  }
-  td,
   .wrap-400 {
     flex-wrap: wrap;
     display: flex;
@@ -739,6 +743,15 @@ table {
   .spacegap-10-1155 {
     justify-content: space-between;
     gap: 10px;
+  }
+}
+@media screen and (max-width: 350px) {
+    td:nth-child(1) p {
+    flex-direction: column-reverse;
+    display: flex;
+  }
+  .wrap-350{
+    flex-wrap: wrap;
   }
 }
 @media screen and (max-height: 640px) {
@@ -763,5 +776,7 @@ canvas{
   width: 100%;
   max-height: 100%;
   cursor:pointer;
+         user-select: none;
+         
 
 }
