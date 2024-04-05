@@ -28,7 +28,7 @@ function ChartBoard({ state }) {
   let datax = useRef([]);
   let data = useRef([100, 204, 205, 420, 500, 680, 106]);
   let difference = useRef(400);
-  let lowest = useRef(20);
+  let lowest = useRef(0);
   let divisor = useRef(4);
   let constantbottom = useRef(0);
   let constantleft = useRef(0);
@@ -69,7 +69,6 @@ function ChartBoard({ state }) {
   let precision = useRef(2);
   let chathi = useRef(10);
   let chatwi = useRef(20);
-  let roundheight = useRef(10);
   let canvas = useRef(null);
   useEffect(() => {
     inputfx();
@@ -82,6 +81,10 @@ function ChartBoard({ state }) {
       },
       true
     );
+    window.outerWidth < 500 ? (fontguy.current = 18) : (fontguy.current = 10);
+    window.onresize = () => {
+      window.outerWidth < 500 ? (fontguy.current = 18) : (fontguy.current = 10);
+    };
   }, [state]);
 
   let [cxt, setcxt] = useState(canvas?.current?.getContext("2d"));
@@ -621,7 +624,7 @@ function ChartBoard({ state }) {
     cxt.lineWidth = ".2";
     cxt.letterSpacing = "1px";
     cxt.fillStyle = "rgb(158,158,158)";
-    cxt.font = 18 + "px sans-serif";
+    cxt.font = fontguy.current + 1 + "px sans-serif";
     cxt.translate(
       index * (wid.current + gap.current) +
         fgap.current +
@@ -657,31 +660,7 @@ function ChartBoard({ state }) {
       textxfxindex(index);
     }
   };
-  let roundTop = (i, xax, yax, filler) => {
-    // round top
-    cxt.beginPath();
-    cxt.fillStyle = filler;
-    cxt.moveTo(datayx.current[i], datayy.current[i]);
-    cxt.quadraticCurveTo(
-      datayx.current[i] + wid.current / 2,
-      datayy.current[i] - 15,
-      datayx.current[i] + wid.current,
-      datayy.current[i]
-    );
-    if (cxt.isPointInPath(xax, yax)) {
-      pathpoint.current = [datayx.current[i], datayy.current[i]];
-    }
-    cxt.fill();
-    cxt.closePath();
-    cxt.beginPath();
-    cxt.save();
-    cxt.lineWidth = "2";
-    cxt.strokeStyle = cxt.fillStyle;
-    cxt.moveTo(datayx.current[i], datayy.current[i]);
-    cxt.lineTo(datayx.current[i] + wid.current, datayy.current[i]);
-    cxt.restore();
-    cxt.closePath();
-  };
+
   let bars = (xax, yax) => {
     cxt.lineWidth = "1";
     data.current.map((e, i) => {
@@ -698,8 +677,7 @@ function ChartBoard({ state }) {
             constantleft.current,
           canvas.current.height -
             constantbottom.current -
-            (e * scaley.current + yoriginbottom.current) +
-            roundheight.current,
+            (e * scaley.current + yoriginbottom.current),
           i * (gap.current + wid.current) +
             fgap.current +
             chartbeginx.current +
@@ -709,8 +687,7 @@ function ChartBoard({ state }) {
           canvas.current.height -
             constantbottom.current -
             (e * scaley.current + yoriginbottom.current) +
-            e * scaley.current -
-            roundheight.current
+            e * scaley.current
         ))
       );
       //gradient.addColorStop(0,"rgb(23,74,97)")
@@ -725,13 +702,12 @@ function ChartBoard({ state }) {
           constantleft.current,
         canvas.current.height -
           constantbottom.current -
-          (e * scaley.current + yoriginbottom.current) +
-          roundheight.current,
+          (e * scaley.current + yoriginbottom.current),
         wid.current,
-        e * scaley.current - roundheight.current
+        e * scaley.current
       );
 
-      cxt.rect(
+      cxt.roundRect(
         i * (gap.current + wid.current) +
           fgap.current +
           chartbeginx.current +
@@ -739,10 +715,10 @@ function ChartBoard({ state }) {
           constantleft.current,
         canvas.current.height -
           constantbottom.current -
-          (e * scaley.current + yoriginbottom.current) +
-          roundheight.current,
+          (e * scaley.current + yoriginbottom.current),
         wid.current,
-        e * scaley.current - roundheight.current
+        e * scaley.current,
+        [20, 20, 0, 0]
       );
       //click check
       if (cxt.isPointInPath(xax, yax)) {
@@ -759,10 +735,8 @@ function ChartBoard({ state }) {
       datayy.current[i] =
         canvas.current.height -
         constantbottom.current -
-        (e * scaley.current + yoriginbottom.current) +
-        roundheight.current;
-      datayh.current[i] = e * scaley.current - roundheight.current;
-      roundTop(i, xax, yax, gradient);
+        (e * scaley.current + yoriginbottom.current);
+      datayh.current[i] = e * scaley.current;
     });
   };
   let barChart = (xax, yax) => {
@@ -898,21 +872,14 @@ function ChartBoard({ state }) {
           wid.current,
           datayh.current[e]
         );
-        cxt.rect(
+        cxt.roundRect(
           datayx.current[e],
           datayy.current[e],
           wid.current,
-          datayh.current[e]
+          datayh.current[e],
+          [20, 20, 0, 0]
         );
         cxt.fill();
-        roundTop(
-          i,
-          r.offsetX *
-            (boolguy ? canvas.current.width / canvas.current.offsetWidth : 1),
-          r.offsetY *
-            (boolguy ? canvas.current.height / canvas.current.offsetHeight : 1),
-          gradient1
-        );
         //chat
         chat(
           gradient1,
@@ -953,7 +920,7 @@ function ChartBoard({ state }) {
       : "";
     eval(`
     hover(
-      Object.values(datayx.current)[${hoverType}],
+      Object.values(datayx.current)[${hoverType}]+wid.current/2,
       Object.values(datayy.current)[${hoverType}]
     )
    `);
