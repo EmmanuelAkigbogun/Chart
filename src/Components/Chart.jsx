@@ -643,7 +643,7 @@ function Chart() {
         ))
       );
       //gradient.addColorStop(0,"rgb(23,74,97)")
-      gradient.addColorStop(1, "rgba(15,15,15,.6)");
+      gradient.addColorStop(1, "rgba(15,15,15,.8)");
       cxt.fillStyle = gradient;
       //bars
       cxt.clearRect(
