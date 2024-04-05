@@ -53,7 +53,7 @@ function ChartBoard({ state}) {
   let yorigintop = useRef(0);
   let begintexty = useRef(0);
   let begintextx = useRef(-10);
-  let fontguy = useRef(11);
+  let fontguy = useRef(13);
   let dashy = useRef(5);
   let dashx = useRef(5);
   let x = useRef(0);
