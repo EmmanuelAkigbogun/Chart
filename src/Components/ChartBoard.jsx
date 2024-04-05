@@ -53,7 +53,7 @@ function ChartBoard({ state}) {
   let yorigintop = useRef(0);
   let begintexty = useRef(0);
   let begintextx = useRef(-10);
-  let fontguy = useRef(18);
+  let fontguy = useRef(16);
   let dashy = useRef(5);
   let dashx = useRef(5);
   let x = useRef(0);
@@ -611,7 +611,7 @@ function ChartBoard({ state}) {
     cxt.lineWidth = ".2";
     cxt.letterSpacing = "1px";
     cxt.fillStyle = "rgb(158,158,158)";
-    cxt.font = 20 + "px sans-serif";
+    cxt.font = 18 + "px sans-serif";
     cxt.translate(
       index * (wid.current + gap.current) +
         fgap.current +
