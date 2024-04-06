@@ -27,7 +27,7 @@ function ChartBoard({ state }) {
   ]);
   let datax = useRef([]);
   let data = useRef([100, 204, 205, 420, 500, 680, 106]);
-  let difference = useRef(400);
+  let difference = useRef(100);
   let lowest = useRef(0);
   let divisor = useRef(4);
   let constantbottom = useRef(0);
