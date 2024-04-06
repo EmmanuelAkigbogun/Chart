@@ -73,9 +73,10 @@ function ChartBoard({ state }) {
   useEffect(() => {
     inputfx();
     canvas.current.addEventListener("touchstart",(e)=>{
+       console.log(e)
+       hover("touch", "touch");
        e.preventDefault();
        e.stopPropagation();
-       hover("touch", "touch");
     });
   }, [state]);
 
@@ -682,7 +683,7 @@ function ChartBoard({ state }) {
         ))
       );
       //gradient.addColorStop(0,"rgb(23,74,97)")
-      gradient.addColorStop(1, "rgba(81,209,178,.1)");
+      gradient.addColorStop(1, "rgba(52, 202, 165,.1)");
       cxt.fillStyle = gradient;
       //bars
       cxt.clearRect(
@@ -853,7 +854,8 @@ function ChartBoard({ state }) {
           ))
         );
         //gradient1.addColorStop(0,"rgb(80,24,17)")
-        gradient1.addColorStop(0, "rgba(81,209,178,.4)");
+        gradient1.addColorStop(1, "rgba(52, 202, 165,0)");
+        gradient1.addColorStop(0, "rgba(52, 202, 165)");
         cxt.fillStyle = gradient1;
         //bar
         cxt.moveTo(datayx.current[e], datayy.current[e]);
@@ -885,7 +887,7 @@ function ChartBoard({ state }) {
         1 == 2 &&
           star(
             e,
-            "rgba(81,209,178)",
+            "rgba(52, 202, 165)",
             "white",
             datayx.current[e] + wid.current,
             datayy.current[e],
