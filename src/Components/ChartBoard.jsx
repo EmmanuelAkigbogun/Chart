@@ -72,19 +72,11 @@ function ChartBoard({ state }) {
   let canvas = useRef(null);
   useEffect(() => {
     inputfx();
-    canvas.current.addEventListener(
-      "touchstart",
-      (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        hover("touch", "touch");
-      },
-      true
-    );
-    window.outerWidth < 500 ? (fontguy.current = 18) : (fontguy.current = 10);
-    window.onresize = () => {
-      window.outerWidth < 500 ? (fontguy.current = 18) : (fontguy.current = 10);
-    };
+    canvas.current.addEventListener("touchstart",(e)=>{
+       e.preventDefault();
+       e.stopPropagation();
+       hover("touch", "touch");
+    });
   }, [state]);
 
   let [cxt, setcxt] = useState(canvas?.current?.getContext("2d"));
@@ -98,7 +90,6 @@ function ChartBoard({ state }) {
       }
       yearly.current = yearly.current.reverse();
     }
-    console.log(state);
 
     state == "weekly"
       ? (datax.current = weekly.current)
