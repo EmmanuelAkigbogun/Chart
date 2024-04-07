@@ -2,7 +2,7 @@ import { useState } from "react";
 import files from "../assets/files";
 import ChartBoard from "./ChartBoard";
 function BarChart() {
-  let [state, setState] = useState("weekly");
+  let [state, setState] = useState("monthly");
   return (
     <>
       <section className="width-100 border-rad-14 white-bg padding-16-20 column gap-16 bar gray-border">
