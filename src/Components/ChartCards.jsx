@@ -10,7 +10,7 @@ function ChartCards({
 }) {
   return (
     <>
-      <section className="padding-16 column gap-10 white-bg fit-content flex-1 border-rad-14 gray-border width-100-800">
+      <section className="padding-16 column gap-10 white-bg fit-content flex-1 border-rad-14 gray-border width-100-800 j-center">
         <section className="space-between wrap-400 gap-10">
           <section className="icon-40 border-rad-50 gray-border j-center align-center">
             <img src={icon} alt="box tick" />
