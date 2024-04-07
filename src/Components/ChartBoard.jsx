@@ -78,13 +78,26 @@ function ChartBoard({ state }) {
        e.preventDefault();
        e.stopPropagation();
     });
+        canvas.current.addEventListener("dblclick",(e)=>{
+           lowest.current == 0
+             ? (lowest.current = -100)
+             : (lowest.current = 0);
+                  constantscaley.current == 2.3
+                    ? (constantscaley.current = 1.15)
+                    : (constantscaley.current = 2.3);
+                        difference.current == 100
+                          ? (difference.current = 200)
+                          : (difference.current = 100);
+          inputfx()
+          hover("click", "click");
+                 
+        })
   }, [state]);
-
-  let [cxt, setcxt] = useState(canvas?.current?.getContext("2d"));
-  let [gradient, setgradient] = useState([]);
-  let [gradient1, setgradient1] = useState([]);
+  let ctx = useRef(canvas?.current?.getContext("2d"))
+  let gradient = useRef([]);
+  let gradient1 = useRef([]);
   let inputfx = () => {
-    setcxt((cxt = canvas.current.getContext("2d")));
+  ctx.current = canvas?.current?.getContext("2d");
     if (state == "yearly") {
       for (let index = 0; index < 7; index++) {
         yearly.current[index] = new Date().getFullYear() - index;
@@ -195,8 +208,8 @@ function ChartBoard({ state }) {
   let forward = (h) => {
     x1 = x.current + h * Math.cos((Math.PI / 180) * o);
     y1 = y.current + h * Math.sin((Math.PI / 180) * o);
-    cxt.lineTo(x1, y1);
-    cxt.stroke();
+    ctx.current.lineTo(x1, y1);
+    ctx.current.stroke();
     x.current = x1;
     y.current = y1;
   };
@@ -209,31 +222,31 @@ function ChartBoard({ state }) {
         Math.abs(parseInt(minimum.current / increment.current) - 1) *
           increment.current *
           scaley.current +
-        cxt.measureText(list.current[0]).hangingBaseline;
+        ctx.current.measureText(list.current[0]).hangingBaseline;
     } else {
-      constantbottom.current = cxt.measureText(list.current[0]).hangingBaseline;
+      constantbottom.current = ctx.current.measureText(list.current[0]).hangingBaseline;
     }
   };
   let shadow = () => {
     //shadow
-    cxt.shadowBlur = 11;
-    cxt.shadowColor = "rgba(35, 35, 35, .5)";
-    cxt.shadowOffsetX = shadowx.current;
-    cxt.shadowOffsetY = shadowy.current;
+    ctx.current.shadowBlur = 11;
+    ctx.current.shadowColor = "rgba(35, 35, 35, .5)";
+    ctx.current.shadowOffsetX = shadowx.current;
+    ctx.current.shadowOffsetY = shadowy.current;
   };
   let shadowoff = () => {
     //shadow
-    cxt.shadowBlur = 0;
-    cxt.shadowColor = "rgba(35, 35, 35, .5)";
-    cxt.shadowOffsetX = 0;
-    cxt.shadowOffsetY = 0;
+    ctx.current.shadowBlur = 0;
+    ctx.current.shadowColor = "rgba(35, 35, 35, .5)";
+    ctx.current.shadowOffsetX = 0;
+    ctx.current.shadowOffsetY = 0;
   };
   let circle = (x, y, r) => {
-    cxt.arc(x, y, 10, 0, Math.PI * 2);
+    ctx.current.arc(x, y, 10, 0, Math.PI * 2);
   };
   let star = (e, color, color0, tox, toy, w, text) => {
-    cxt.beginPath();
-    cxt.font = fontguy.current + "px sans-serif";
+    ctx.current.beginPath();
+    ctx.current.font = fontguy.current + "px sans-serif";
     x.current = tox;
     y.current = toy;
     forward(w);
@@ -247,19 +260,19 @@ function ChartBoard({ state }) {
     forward(w);
     right(144);
     forward(w);
-    cxt.fillStyle = color;
-    cxt.strokeStyle = color0;
-    cxt.fill();
-    cxt.stroke();
+    ctx.current.fillStyle = color;
+    ctx.current.strokeStyle = color0;
+    ctx.current.fill();
+    ctx.current.stroke();
     //text
-    cxt.beginPath();
-    cxt.fillStyle = "white";
-    cxt.fillText(
+    ctx.current.beginPath();
+    ctx.current.fillStyle = "white";
+    ctx.current.fillText(
       text,
-      tox + w / 2 - cxt.measureText(text).width / 2,
-      toy + cxt.measureText(text).hangingBaseline
+      tox + w / 2 - ctx.current.measureText(text).width / 2,
+      toy + ctx.current.measureText(text).hangingBaseline
     );
-    cxt.fill();
+    ctx.current.fill();
   };
   let chatwithin = (e) => {
     if (data.current[e] < 0)
@@ -269,7 +282,7 @@ function ChartBoard({ state }) {
         (10 +
           (shadowy.current < 0 ? -shadowy.current : 0) +
           chathi.current +
-          cxt.measureText(data.current[e]).hangingBaseline +
+          ctx.current.measureText(data.current[e]).hangingBaseline +
           3 * triwid.current)
       );
 
@@ -278,118 +291,118 @@ function ChartBoard({ state }) {
       (10 +
         (shadowy.current < 0 ? -shadowy.current : 0) +
         chathi.current +
-        cxt.measureText(data.current[e]).hangingBaseline +
+        ctx.current.measureText(data.current[e]).hangingBaseline +
         3 * triwid.current)
     );
   };
   let chat = (color, color0, tox, toy, w, text, levitate) => {
     color = "rgb(15,15,15,.8)";
-    cxt.font = fontguy + "px sans-serif";
-    cxt.beginPath();
+    ctx.current.font = fontguy + "px sans-serif";
+    ctx.current.beginPath();
     x.current = tox;
     y.current = toy - (text < 0 ? -levitate : levitate);
     //triangle
-    cxt.moveTo(x.current, y.current);
-    cxt.lineTo(
+    ctx.current.moveTo(x.current, y.current);
+    ctx.current.lineTo(
       x.current + (text < 0 ? -w : w),
       y.current - (text < 0 ? -w : w)
     );
-    cxt.lineTo(
+    ctx.current.lineTo(
       x.current - (text < 0 ? -w : w),
       y.current - (text < 0 ? -w : w)
     );
-    cxt.lineTo(x.current, y.current);
-    cxt.fillStyle = color;
-    cxt.strokeStyle = color0;
+    ctx.current.lineTo(x.current, y.current);
+    ctx.current.fillStyle = color;
+    ctx.current.strokeStyle = color0;
     // round rect
-    cxt.roundRect(
+    ctx.current.roundRect(
       x.current - 2 * (text < 0 ? -w : w),
       y.current -
         3 * (text < 0 ? -w : w) -
-        (text < 0 ? 2 * w : cxt.measureText(text).hangingBaseline) -
+        (text < 0 ? 2 * w : ctx.current.measureText(text).hangingBaseline) -
         (text < 0 ? 0 : 1) * chathi.current,
-      (text < 0 ? -1 : 1) * (cxt.measureText(text).width + 2 * w) +
+      (text < 0 ? -1 : 1) * (ctx.current.measureText(text).width + 2 * w) +
         (text < 0 ? -1 : 1) * chatwi.current,
-      cxt.measureText(text).hangingBaseline + 2 * w + chathi.current,
+      ctx.current.measureText(text).hangingBaseline + 2 * w + chathi.current,
       3
     );
-    cxt.fill();
-    cxt.stroke();
+    ctx.current.fill();
+    ctx.current.stroke();
     //text
-    cxt.beginPath();
-    cxt.fillStyle = "white";
-    cxt.fillText(
+    ctx.current.beginPath();
+    ctx.current.fillStyle = "white";
+    ctx.current.fillText(
       text,
       x.current -
-        (text < 0 ? -w + cxt.measureText(text).width : w) +
+        (text < 0 ? -w + ctx.current.measureText(text).width : w) +
         ((text < 0 ? -1 : 1) * chatwi.current) / 2,
       y.current -
-        (text < 0 ? 0 : -cxt.measureText(text).hangingBaseline) +
-        (text < 0 ? 1 : -1) * (cxt.measureText(text).hangingBaseline + 2 * w) -
+        (text < 0 ? 0 : -ctx.current.measureText(text).hangingBaseline) +
+        (text < 0 ? 1 : -1) * (ctx.current.measureText(text).hangingBaseline + 2 * w) -
         ((text < 0 ? -1 : 1) * chathi.current) / 2
     );
-    cxt.fill();
-    cxt.stroke();
+    ctx.current.fill();
+    ctx.current.stroke();
     //remove stroke
-    cxt.beginPath();
-    cxt.save();
-    cxt.lineWidth = "2";
-    cxt.strokeStyle = color;
-    cxt.moveTo(
+    ctx.current.beginPath();
+    ctx.current.save();
+    ctx.current.lineWidth = "2";
+    ctx.current.strokeStyle = color;
+    ctx.current.moveTo(
       x.current - (text < 0 ? -w : w),
       y.current - (text < 0 ? -w : w)
     );
-    cxt.lineTo(
+    ctx.current.lineTo(
       x.current + (text < 0 ? -w : w),
       y.current - (text < 0 ? -w : w)
     );
-    cxt.stroke();
-    cxt.restore();
-    cxt.closePath();
+    ctx.current.stroke();
+    ctx.current.restore();
+    ctx.current.closePath();
   };
   let nthlineyfxpositive = (index, linewidthval, color) => {
-    cxt.strokeStyle = color;
-    cxt.lineWidth = linewidthval;
-    cxt.setLineDash([dashy.current]);
-    cxt.moveTo(
+    ctx.current.strokeStyle = color;
+    ctx.current.lineWidth = linewidthval;
+    ctx.current.setLineDash([dashy.current]);
+    ctx.current.moveTo(
       xoriginleft.current + constantleft.current + chartbeginx.current,
       canvas.current.height -
         constantbottom.current -
         index * mark.current -
         yoriginbottom.current
     );
-    cxt.lineTo(
+    ctx.current.lineTo(
       canvas.current.width - xoriginright.current - constantright.current,
       canvas.current.height -
         constantbottom.current -
         index * mark.current -
         yoriginbottom.current
     );
-    cxt.stroke();
+    ctx.current.stroke();
   };
   let nthlineyfxnegative = (index, linewidthval, color) => {
-    cxt.strokeStyle = color;
-    cxt.lineWidth = linewidthval;
-    cxt.setLineDash([dashy.current]);
-    cxt.moveTo(
+    ctx.current.strokeStyle = color;
+    ctx.current.lineWidth = linewidthval;
+    ctx.current.setLineDash([dashy.current]);
+    ctx.current.moveTo(
       xoriginleft.current + constantleft.current + chartbeginx.current,
       canvas.current.height -
         constantbottom.current -
         index * mark.current -
         yoriginbottom.current
     );
-    cxt.lineTo(
+    ctx.current.lineTo(
       canvas.current.width - xoriginright.current - constantright.current,
       canvas.current.height -
         constantbottom.current -
         index * mark.current -
         yoriginbottom.current
     );
-    cxt.stroke();
+    ctx.current.stroke();
   };
   let lineyfx = () => {
-    cxt.beginPath();
-    cxt.save();
+    ctx.current.beginPath();
+    ctx.current.save();
     //first line
     nthlineyfxpositive(0, "0.5", "rgb(158,158,158,.3)");
     if (maximum.current > 0) {
@@ -403,7 +416,7 @@ function ChartBoard({ state }) {
       }
     }
     //first line
-    nthlineyfxnegative(0, "0.5", "rgb(158,158,158,.3)");
+    //nthlineyfxnegative(0, "0.5", "rgb(158,158,158,.3)");
     if (minimum.current < 0) {
       //other lines
       for (
@@ -413,14 +426,21 @@ function ChartBoard({ state }) {
       ) {
         nthlineyfxnegative(index, "0.5", "rgb(158,158,158,.3)");
       }
+         for (
+        let index = parseInt(minimum.current / increment.current) - 1;
+        index < 1;
+        index++
+      ) {
+        nthlineyfxnegative(index, "0.5", "rgb(158,158,158,.3)");
+      }
     }
-    cxt.restore();
-    cxt.closePath();
+    ctx.current.restore();
+    ctx.current.closePath();
   };
   let nthlinexfxnegative = (index, linewidthval, color) => {
-    cxt.strokeStyle = color;
-    cxt.lineWidth = linewidthval;
-    cxt.moveTo(
+    ctx.current.strokeStyle = color;
+    ctx.current.lineWidth = linewidthval;
+    ctx.current.moveTo(
       index * (wid.current + gap.current) +
         constantleft.current +
         xoriginleft.current +
@@ -430,7 +450,7 @@ function ChartBoard({ state }) {
         (parseInt(minimum.current / increment.current) - 1) * mark.current -
         yoriginbottom.current
     );
-    cxt.lineTo(
+    ctx.current.lineTo(
       index * (wid.current + gap.current) +
         xoriginleft.current +
         constantleft.current +
@@ -440,12 +460,12 @@ function ChartBoard({ state }) {
         0 * mark.current -
         yoriginbottom.current
     );
-    cxt.stroke();
+    ctx.current.stroke();
   };
   let nthlinexfxpositive = (index, linewidthval, color) => {
-    cxt.strokeStyle = color;
-    cxt.lineWidth = linewidthval;
-    cxt.moveTo(
+    ctx.current.strokeStyle = color;
+    ctx.current.lineWidth = linewidthval;
+    ctx.current.moveTo(
       index * (wid.current + gap.current) +
         xoriginleft.current +
         constantleft.current +
@@ -455,7 +475,7 @@ function ChartBoard({ state }) {
         0 * mark.current -
         yoriginbottom.current
     );
-    cxt.lineTo(
+    ctx.current.lineTo(
       index * (wid.current + gap.current) +
         xoriginleft.current +
         constantleft.current +
@@ -465,12 +485,12 @@ function ChartBoard({ state }) {
         (parseInt(maximum.current / increment.current) + 1) * mark.current -
         yoriginbottom.current
     );
-    cxt.stroke();
+    ctx.current.stroke();
   };
   // canvas.current.height - constantbottom.current - 0 * mark.current - yoriginbottom.current
   let linexfx = () => {
-    cxt.beginPath();
-    cxt.setLineDash([dashx.current]);
+    ctx.current.beginPath();
+    ctx.current.setLineDash([dashx.current]);
     if (maximum.current > 0) {
       //first line
       nthlinexfxpositive(0, "0.5", "rgb(158,158,158,.3)");
@@ -487,8 +507,8 @@ function ChartBoard({ state }) {
         nthlinexfxnegative(index, "0.5", "rgb(158,158,158,.3)");
       }
     }
-    cxt.restore();
-    cxt.closePath();
+    ctx.current.restore();
+    ctx.current.closePath();
   };
 
   let textyfxpositive = (index, color, colorfill, font) => {
@@ -496,82 +516,82 @@ function ChartBoard({ state }) {
       index * increment.current.toString().includes(".")
         ? (index * increment.current).toPrecision(precision.current)
         : index * increment.current;
-    cxt.beginPath();
-    cxt.lineWidth = ".2";
-    cxt.letterSpacing = "1px";
-    //cxt.strokeStyle = color;
-    cxt.fillStyle = colorfill;
-    cxt.font = font;
+    ctx.current.beginPath();
+    ctx.current.lineWidth = ".2";
+    ctx.current.letterSpacing = "1px";
+    //ctx.current.strokeStyle = color;
+    ctx.current.fillStyle = colorfill;
+    ctx.current.font = font;
     //text y axiz stroke
-    cxt.strokeText(
+    ctx.current.strokeText(
       textval,
       begintexty.current +
         xoriginleft.current +
         constantleft.current -
-        cxt.measureText(textval).width,
+        ctx.current.measureText(textval).width,
       canvas.current.height -
         constantbottom.current -
         index * mark.current -
         yoriginbottom.current +
-        cxt.measureText(index * increment.current).hangingBaseline / 2
+        ctx.current.measureText(index * increment.current).hangingBaseline / 2
     );
-    cxt.stroke();
+    ctx.current.stroke();
     //text y axiz fill
-    cxt.fillText(
+    ctx.current.fillText(
       textval,
       begintexty.current +
         xoriginleft.current +
         constantleft.current -
-        cxt.measureText(textval).width,
+        ctx.current.measureText(textval).width,
       canvas.current.height -
         constantbottom.current -
         index * mark.current -
         yoriginbottom.current +
-        cxt.measureText(index * increment.current).hangingBaseline / 2
+        ctx.current.measureText(index * increment.current).hangingBaseline / 2
     );
-    cxt.fill();
-    cxt.closePath();
+    ctx.current.fill();
+    ctx.current.closePath();
   };
   let textyfxnegative = (index, color, colorfill, font) => {
     let textval =
       index * increment.current.toString().includes(".")
         ? (index * increment.current).toPrecision(precision.current)
         : index * increment.current;
-    cxt.beginPath();
-    cxt.lineWidth = ".2";
-    cxt.letterSpacing = "1px";
-    cxt.strokeStyle = color;
-    cxt.fillStyle = colorfill;
-    cxt.font = font;
+    ctx.current.beginPath();
+    ctx.current.lineWidth = ".2";
+    ctx.current.letterSpacing = "1px";
+    ctx.current.strokeStyle = color;
+    ctx.current.fillStyle = colorfill;
+    ctx.current.font = font;
     //text y axiz stroke
-    cxt.strokeText(
+    ctx.current.strokeText(
       textval,
       begintexty.current +
         xoriginleft.current +
         constantleft.current -
-        cxt.measureText(textval).width,
+        ctx.current.measureText(textval).width,
       canvas.current.height -
         constantbottom.current -
         index * mark.current -
         yoriginbottom.current +
-        cxt.measureText(index * increment.current).hangingBaseline / 2
+        ctx.current.measureText(index * increment.current).hangingBaseline / 2
     );
-    cxt.stroke();
+    ctx.current.stroke();
     //text y axiz fill
-    cxt.fillText(
+    ctx.current.fillText(
       textval,
       begintexty.current +
         xoriginleft.current +
         constantleft.current -
-        cxt.measureText(textval).width,
+        ctx.current.measureText(textval).width,
       canvas.current.height -
         constantbottom.current -
         index * mark.current -
         yoriginbottom.current +
-        cxt.measureText(index * increment.current).hangingBaseline / 2
+        ctx.current.measureText(index * increment.current).hangingBaseline / 2
     );
-    cxt.fill();
-    cxt.closePath();
+    ctx.current.fill();
+    ctx.current.closePath();
   };
   let textyfx = () => {
     textyfxpositive(
@@ -611,13 +631,13 @@ function ChartBoard({ state }) {
   };
 
   let textxfxindex = (index) => {
-    cxt.beginPath();
-    cxt.save();
-    cxt.lineWidth = ".2";
-    cxt.letterSpacing = "1px";
-    cxt.fillStyle = "rgb(158,158,158)";
-    cxt.font = fontguy.current + 1 + "px sans-serif";
-    cxt.translate(
+    ctx.current.beginPath();
+    ctx.current.save();
+    ctx.current.lineWidth = ".2";
+    ctx.current.letterSpacing = "1px";
+    ctx.current.fillStyle = "rgb(158,158,158)";
+    ctx.current.font = fontguy.current + 1 + "px sans-serif";
+    ctx.current.translate(
       index * (wid.current + gap.current) +
         fgap.current +
         xoriginleft.current +
@@ -629,23 +649,23 @@ function ChartBoard({ state }) {
         yoriginbottom.current -
         begintextx.current
     );
-    cxt.rotate((Math.PI / 180) * 0);
+    ctx.current.rotate((Math.PI / 180) * 0);
     //text x axiz stroke
-    cxt.strokeText(
+    ctx.current.strokeText(
       datax.current[index],
-      -cxt.measureText(datax.current[index]).width / 2,
-      cxt.measureText(datax.current[index]).hangingBaseline / 2
+      -ctx.current.measureText(datax.current[index]).width / 2,
+      ctx.current.measureText(datax.current[index]).hangingBaseline / 2
     );
-    cxt.stroke();
+    ctx.current.stroke();
     //text x axiz fill
-    cxt.fillText(
+    ctx.current.fillText(
       datax.current[index],
-      -cxt.measureText(datax.current[index]).width / 2,
-      cxt.measureText(datax.current[index]).hangingBaseline / 2
+      -ctx.current.measureText(datax.current[index]).width / 2,
+      ctx.current.measureText(datax.current[index]).hangingBaseline / 2
     );
-    cxt.fill();
-    cxt.restore();
-    cxt.closePath();
+    ctx.current.fill();
+    ctx.current.restore();
+    ctx.current.closePath();
   };
   let textxfx = () => {
     for (let index = 0; index < datax.current.length; index++) {
@@ -654,14 +674,14 @@ function ChartBoard({ state }) {
   };
 
   let bars = (xax, yax) => {
-    cxt.lineWidth = "1";
+    ctx.current.lineWidth = "1";
     data.current.map((e, i) => {
       //shadow
       shadow();
-      // bars gradient
-      cxt.beginPath();
-      setgradient(
-        (gradient = cxt.createLinearGradient(
+      // bars gradient.current
+      ctx.current.beginPath();
+      
+        gradient.current = ctx.current.createLinearGradient(
           i * (gap.current + wid.current) +
             fgap.current +
             chartbeginx.current +
@@ -680,13 +700,13 @@ function ChartBoard({ state }) {
             constantbottom.current -
             (e * scaley.current + yoriginbottom.current) +
             e * scaley.current
-        ))
-      );
-      //gradient.addColorStop(0,"rgb(23,74,97)")
-      gradient.addColorStop(1, "rgba(52, 202, 165,.1)");
-      cxt.fillStyle = gradient;
+        )
+      
+      //gradient.current.addColorStop(0,"rgb(23,74,97)")
+      gradient.current.addColorStop(1, "rgba(52, 202, 165,.1)");
+      ctx.current.fillStyle = gradient.current;
       //bars
-      cxt.clearRect(
+      ctx.current.clearRect(
         i * (gap.current + wid.current) +
           fgap.current +
           chartbeginx.current +
@@ -699,7 +719,7 @@ function ChartBoard({ state }) {
         e * scaley.current
       );
 
-      cxt.roundRect(
+      ctx.current.roundRect(
         i * (gap.current + wid.current) +
           fgap.current +
           chartbeginx.current +
@@ -713,10 +733,10 @@ function ChartBoard({ state }) {
         [20, 20, 0, 0]
       );
       //click check
-      if (cxt.isPointInPath(xax, yax)) {
+      if (ctx.current.isPointInPath(xax, yax)) {
         pathpoint.current = [datayx.current[i], datayy.current[i]];
       }
-      cxt.fill();
+      ctx.current.fill();
       //store bar data
       datayx.current[i] =
         i * (gap.current + wid.current) +
@@ -732,13 +752,13 @@ function ChartBoard({ state }) {
     });
   };
   let barChart = (xax, yax) => {
-    cxt.beginPath();
-    cxt.font = fontguy.current + "px sans-serif";
+    ctx.current.beginPath();
+    ctx.current.font = fontguy.current + "px sans-serif";
     if (maxormin.current > 1) {
       constantleft.current =
         chatwi.current / 2 +
         Math.round(
-          cxt.measureText(
+          ctx.current.measureText(
             (parseInt(maxormin.current / increment.current) +
               1 -
               (maxormin.current >= maximum.current ? 0 : 1)) *
@@ -749,7 +769,7 @@ function ChartBoard({ state }) {
     } else {
       constantleft.current =
         chatwi.current / 2 +
-        cxt.measureText(
+        ctx.current.measureText(
           (increment.current * 1).toPrecision(precision.current).toString() +
             " -"
         ).width;
@@ -757,14 +777,14 @@ function ChartBoard({ state }) {
     constantright.current = chatwi.current * 2;
     Math.abs(gap.current) +
       shadowx.current +
-      cxt.measureText(data.current[data.current.length - 1]).width -
+      ctx.current.measureText(data.current[data.current.length - 1]).width -
       wid.current / 2;
     //picture dimension definition from chart content
     canvas.current.height =
       constantbottom.current +
       yorigintop.current +
       yoriginbottom.current +
-      cxt.measureText(list.current[0]).hangingBaseline / 2 +
+      ctx.current.measureText(list.current[0]).hangingBaseline / 2 +
       (maximum.current <= 0
         ? 0
         : 2 +
@@ -779,11 +799,11 @@ function ChartBoard({ state }) {
       chartbeginx.current +
       data.current.length * (wid.current + gap.current);
     //canvas color
-    cxt.clearRect(0, 0, canvas.current.width, canvas.current.height);
-    cxt.fillStyle = "transparent";
-    cxt.rect(0, 0, canvas.current.width, canvas.current.height);
-    cxt.fill();
-    cxt.closePath();
+    ctx.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
+    ctx.current.fillStyle = "transparent";
+    ctx.current.rect(0, 0, canvas.current.width, canvas.current.height);
+    ctx.current.fill();
+    ctx.current.closePath();
     ///*lines y
     lineyfx();
     //*/
@@ -841,41 +861,41 @@ function ChartBoard({ state }) {
           barChart(true, true);
         }
         // hover bar
-        cxt.beginPath();
+        ctx.current.beginPath();
         shadow();
 
-        //gradient
-        setgradient1(
-          (gradient1 = cxt.createLinearGradient(
+        //gradient.current
+        
+          gradient1.current = ctx.current.createLinearGradient(
             datayx.current[e],
             datayy.current[e],
             datayx.current[e] + wid.current,
             datayy.current[e] + datayh.current[e]
-          ))
-        );
-        //gradient1.addColorStop(0,"rgb(80,24,17)")
-        gradient1.addColorStop(1, "rgba(52, 202, 165,0)");
-        gradient1.addColorStop(0, "rgba(52, 202, 165)");
-        cxt.fillStyle = gradient1;
+          )
+        
+        //gradient1.current.addColorStop(0,"rgb(80,24,17)")
+        gradient1.current.addColorStop(1, "rgba(52, 202, 165,0)");
+        gradient1.current.addColorStop(0, "rgba(52, 202, 165)");
+        ctx.current.fillStyle = gradient1.current;
         //bar
-        cxt.moveTo(datayx.current[e], datayy.current[e]);
-        cxt.clearRect(
+        ctx.current.moveTo(datayx.current[e], datayy.current[e]);
+        ctx.current.clearRect(
           datayx.current[e],
           datayy.current[e],
           wid.current,
           datayh.current[e]
         );
-        cxt.roundRect(
+        ctx.current.roundRect(
           datayx.current[e],
           datayy.current[e],
           wid.current,
           datayh.current[e],
           [20, 20, 0, 0]
         );
-        cxt.fill();
+        ctx.current.fill();
         //chat
         chat(
-          gradient1,
+          gradient1.current,
           "white",
           datayx.current[e] + wid.current / 2,
           datayy.current[e],
