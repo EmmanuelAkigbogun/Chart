@@ -7,8 +7,10 @@ function PercentBars({ platForm, money, percent }) {
           <p
             className="percent"
             style={{
-              width: Math.random().toString().slice(2, 4) + "%",
-              background: "#" + Math.random().toString().slice(2, 8),
+              width: percent,
+              background: `rgb(${Math.random() * 250},${
+                Math.random() * 255
+              },${Math.random() * 255 })`,
             }}
           ></p>
         </section>

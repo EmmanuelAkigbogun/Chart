@@ -89,7 +89,7 @@ function ChartBoard({ state }) {
                           ? (difference.current = 200)
                           : (difference.current = 100);
           inputfx()
-          hover("click", "click");
+          tryhover();
                  
         })
   }, [state]);
