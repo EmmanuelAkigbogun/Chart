@@ -125,11 +125,11 @@ function ChartA() {
     data.current = data.current.map((e) => Math.round(e));
     if (Math.round(maxormin.current / divisor.current) > 5) {
       ///*
-      increment.current = +(
-        (Math.round(maxormin.current / divisor.current) + 10)
-          .toString()
-          .slice(0, increment.current.length - 1) + "0"
-      );
+       increment.current = Math.round(maxormin.current / divisor.current) + 10;
+       increment.current = increment.current.toString();
+       increment.current = +(
+         increment.current.slice(0, increment.current.length - 1) + "0"
+       );
       //*/
       //increment.current = Math.round(maximum.current/4)
       if (

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef} from "react";
 function ChartBoard({ state }) {
   let weekly = useRef(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
   let monthly = useRef([
@@ -70,7 +70,10 @@ function ChartBoard({ state }) {
   let chathi = useRef(10);
   let chatwi = useRef(20);
   let canvas = useRef(null);
-  useEffect(() => {
+  let ctx = useRef(canvas?.current?.getContext("2d"));
+  let gradient = useRef([]);
+  let gradient1 = useRef([]);
+    useEffect(() => {
     inputfx();
     canvas.current.addEventListener("touchstart",(e)=>{
        console.log(e)
@@ -82,9 +85,7 @@ function ChartBoard({ state }) {
            lowest.current == 0
              ? (lowest.current = -100)
              : (lowest.current = 0);
-                  constantscaley.current == 2.3
-                    ? (constantscaley.current = 1.15)
-                    : (constantscaley.current = 2.3);
+         
                         difference.current == 100
                           ? (difference.current = 200)
                           : (difference.current = 100);
@@ -93,9 +94,6 @@ function ChartBoard({ state }) {
                  
         })
   }, [state]);
-  let ctx = useRef(canvas?.current?.getContext("2d"))
-  let gradient = useRef([]);
-  let gradient1 = useRef([]);
   let inputfx = () => {
   ctx.current = canvas?.current?.getContext("2d");
     if (state == "yearly") {
@@ -103,16 +101,13 @@ function ChartBoard({ state }) {
         yearly.current[index] = new Date().getFullYear() - index;
       }
       yearly.current = yearly.current.reverse();
+      datax.current = yearly.current
     }
-
-    state == "weekly"
-      ? (datax.current = weekly.current)
-      : state == "monthly"
-      ? (datax.current = monthly.current)
-      : state == "yearly"
-      ? (datax.current = yearly.current)
-      : "";
-
+else if ( state == "weekly") {
+  datax.current = weekly.current
+} else {
+  datax.current = monthly.current
+}
     rangefx();
     tryhover();
   };
@@ -133,10 +128,10 @@ function ChartBoard({ state }) {
     data.current = data.current.map((e) => Math.round(e));
     if (Math.round(maxormin.current / divisor.current) > 5) {
       ///*
+      increment.current = Math.round(maxormin.current / divisor.current) + 10;
+      increment.current = increment.current.toString();
       increment.current = +(
-        (Math.round(maxormin.current / divisor.current) + 10)
-          .toString()
-          .slice(0, increment.current.length - 1) + "0"
+        increment.current.slice(0, increment.current.length - 1) + "0"
       );
       //*/
       //increment.current = Math.round(maximum.current/4)
@@ -200,14 +195,14 @@ function ChartBoard({ state }) {
   };
   let rangefx = () => {
     randomdata();
+      checklowest();
     autoscalefx();
-    checklowest();
     barChart(true, true);
     tryhover();
   };
   let forward = (h) => {
-    x1 = x.current + h * Math.cos((Math.PI / 180) * o);
-    y1 = y.current + h * Math.sin((Math.PI / 180) * o);
+    let x1 = x.current + h * Math.cos((Math.PI / 180) * o.current);
+    let y1 = y.current + h * Math.sin((Math.PI / 180) * o.current);
     ctx.current.lineTo(x1, y1);
     ctx.current.stroke();
     x.current = x1;
@@ -270,7 +265,9 @@ function ChartBoard({ state }) {
     ctx.current.fillText(
       text,
       tox + w / 2 - ctx.current.measureText(text).width / 2,
-      toy + ctx.current.measureText(text).hangingBaseline
+      toy +
+        ctx.current.measureText(text).hangingBaseline +
+        ctx.current.measureText(text).hangingBaseline/2
     );
     ctx.current.fill();
   };
@@ -404,7 +401,7 @@ function ChartBoard({ state }) {
     ctx.current.beginPath();
     ctx.current.save();
     //first line
-    nthlineyfxpositive(0, "0.5", "rgb(158,158,158,.3)");
+    nthlineyfxpositive(0, "0.7", "rgba(158,158,158,.8)");
     if (maximum.current > 0) {
       //other lines
       for (
@@ -412,11 +409,13 @@ function ChartBoard({ state }) {
         index < parseInt(maximum.current / increment.current) + 2;
         index++
       ) {
-        nthlineyfxpositive(index, "0.5", "rgb(158,158,158,.3)");
+        ctx.current.beginPath();
+        nthlineyfxpositive(index, "0.7", "rgba(158,158,158,.8)");
       }
     }
     //first line
-    //nthlineyfxnegative(0, "0.5", "rgb(158,158,158,.3)");
+    //  ctx.current.beginPath();
+    //nthlineyfxnegative(0, "0.7", "rgba(158,158,158,.8)");
     if (minimum.current < 0) {
       //other lines
       for (
@@ -424,14 +423,16 @@ function ChartBoard({ state }) {
         index < 1;
         index++
       ) {
-        nthlineyfxnegative(index, "0.5", "rgb(158,158,158,.3)");
+        ctx.current.beginPath();
+        nthlineyfxnegative(index, "0.7", "rgba(158,158,158,.8)");
       }
-         for (
+      for (
         let index = parseInt(minimum.current / increment.current) - 1;
         index < 1;
         index++
       ) {
-        nthlineyfxnegative(index, "0.5", "rgb(158,158,158,.3)");
+        ctx.current.beginPath();
+        nthlineyfxnegative(index, "0.7", "rgba(158,158,158,.8)");
       }
     }
     ctx.current.restore();
@@ -493,18 +494,21 @@ function ChartBoard({ state }) {
     ctx.current.setLineDash([dashx.current]);
     if (maximum.current > 0) {
       //first line
-      nthlinexfxpositive(0, "0.5", "rgb(158,158,158,.3)");
+      nthlinexfxpositive(0, "0.7", "rgba(158,158,158,.8)");
       //other lines
       for (let index = 1; index < data.current.length + 1; index++) {
-        nthlinexfxpositive(index, "0.5", "rgb(158,158,158,.3)");
+        ctx.current.beginPath();
+        nthlinexfxpositive(index, "0.7", "rgba(158,158,158,.8)");
       }
     }
     if (minimum.current < 0) {
       //first line
-      nthlinexfxnegative(0, "0.5", "rgb(158,158,158,.3)");
+      ctx.current.beginPath();
+      nthlinexfxnegative(0, "0.7", "rgba(158,158,158,.8)");
       //other lines
       for (let index = 1; index < data.current.length + 1; index++) {
-        nthlinexfxnegative(index, "0.5", "rgb(158,158,158,.3)");
+        ctx.current.beginPath();
+        nthlinexfxnegative(index, "0.7", "rgba(158,158,158,.8)");
       }
     }
     ctx.current.restore();
@@ -945,6 +949,7 @@ function ChartBoard({ state }) {
         onClick={() => {
           hover("click", "click");
         }}
+        className="pointer"
       ></canvas>
     </>
   );

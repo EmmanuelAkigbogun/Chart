@@ -1,19 +1,20 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import files from "../assets/files";
+import { Cont } from "../App";
 import SideBarIcon from "./SideBarIcon";
 function SideBar({hamburger}) {
   let [state, setSate] = useState("category");
-  let [toggle,setToggle]=useState("light")
+  let darklight = useContext(Cont);
   let handleClick=(e)=>{
-    setToggle((toggle = e.target.alt.split(" ")[0]));
-    console.log(e.target.alt.split(" ")[0]);
+    darklight.setToggleLight((darklight.toggleLight = e.target.alt.split(" ")[0]));
+        document.documentElement.setAttribute("data-theme", e.target.alt.split(" ")[0]);
   }
+        const context = useContext(Cont);
+        let { toggleLight } = context;
   return (
     <>
       <section
-        className={`side-bar fixed ${
-          hamburger == "open" ? "" : "none-800"
-        }`}
+        className={`side-bar fixed ${hamburger == "open" ? "" : "none-800"}`}
       >
         <section className="side-bar-child space-between gap-154 column scroll-height">
           <section className="j-center align-center gray-bg fixed padding-top-20 padding-bottom-20 logo">
@@ -25,7 +26,7 @@ function SideBar({hamburger}) {
                 state={state}
                 setSate={setSate}
                 alt="category"
-                img={files.category}
+                img={ toggleLight=="light"?files.category:files.categoryDark}
               />
               <SideBarIcon
                 state={state}
@@ -57,18 +58,26 @@ function SideBar({hamburger}) {
                 alt="info icon"
                 img={files.info}
               />
-              <section className="column padding-8 dark-light gap-16">
+              <section className={`column padding-8 dark-light gap-16 ${toggleLight=="light"?"":"dark-border"}`}>
                 <img
-                  src={toggle == "light" ? files.light : files.lightOff}
+                  src={
+                    darklight.toggleLight == "light"
+                      ? files.light
+                      : files.lightOff
+                  }
                   alt="light icon"
-                  className="icon-24"
+                  className="icon-24 pointer"
                   onClick={handleClick}
                   title="light"
                 />
                 <img
-                  src={toggle == "light" ? files.darkOff : files.dark}
+                  src={
+                    darklight.toggleLight == "light"
+                      ? files.darkOff
+                      : files.dark
+                  }
                   alt="dark icon"
-                  className="icon-24"
+                  className="icon-24 pointer"
                   onClick={handleClick}
                   title="dark"
                 />
@@ -80,14 +89,22 @@ function SideBar({hamburger}) {
               <img
                 src={files.arrowRight}
                 alt="arrow right icon"
-                className="icon-24"
+                className="icon-24 pointer"
               />
             </section>
             <section className="j-center">
-              <img src={files.setting} alt="setting icon" className="icon-24" />
+              <img
+                src={files.setting}
+                alt="setting icon"
+                className="icon-24 pointer"
+              />
             </section>
             <section className="j-center">
-              <img src={files.logOut} alt="logout icon" className="icon-24" />
+              <img
+                src={files.logOut}
+                alt="logout icon"
+                className="icon-24 pointer"
+              />
             </section>
           </section>
         </section>

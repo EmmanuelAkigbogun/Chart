@@ -20,6 +20,7 @@ import boxTick from "./images/box-tick.svg";
 import breadcrumbIcon from "./images/breadcrumb-icon.svg";
 import calendar from "./images/calendar.svg";
 import category from "./images/category.svg";
+import categoryDark from "./images/category-dark.svg";
 import chat from "./images/chat.svg";
 import cart from "./images/cart.svg";
 import chart1 from "./images/chart1.png";
@@ -62,16 +63,17 @@ export default {
   breadcrumbIcon: breadcrumbIcon,
   calendar: calendar,
   category: category,
+  categoryDark: categoryDark,
   cart: cart,
   chat: chat,
   chart1: chart1,
   chart2: chart2,
-  close:close,
+  close: close,
   dark: dark,
   darkOff: darkOff,
   discount: discount,
   download: download,
-  hamburger:hamburger,
+  hamburger: hamburger,
   income: income,
   info: info,
   light: light,
