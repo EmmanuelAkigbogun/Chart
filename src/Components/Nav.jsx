@@ -2,16 +2,18 @@ import { useContext, useState } from "react";
 import files from "../assets/files";
 import Dates from "./Dates";
 import { Cont } from "../App";
-function Nav({hamburger,setHamburger}) {
+import Search from "../Search";
+import SearchData from "../SearchData";
+function Nav({ hamburger, setHamburger }) {
   let handleClick = () => {
     setHamburger((hamburger = "open"));
   };
   let handleClose = () => {
-      setHamburger((hamburger = ""));
+    setHamburger((hamburger = ""));
   };
-    const context = useContext(Cont);
-    let {toggleLight}=context
-    
+  const context = useContext(Cont);
+  let { toggleLight } = context;
+
   return (
     <>
       <nav
@@ -69,19 +71,21 @@ function Nav({hamburger,setHamburger}) {
           } width-100 space-between align-center`}
         >
           <h2 className="heading-2">Dashboard</h2>
-          <section
-            className={`${
-              hamburger == "open" && "width-100-1155 flex-1155"
-            } border-rad-24 gray-border row gap-8 padding-left-16 search none-1155`}
-          >
-            <img src={files.search} alt="search-icon" />
-            <input
-              type="search"
+          <section className={`column`}>
+            <section
               className={`${
-                hamburger == "open" && "input-search"
-              } no-border border-rad-24 height-48`}
-              placeholder="Search..."
-            />
+                hamburger == "open" && "width-100-1155 flex-1155"
+              } border-rad-24 gray-border row gap-8 padding-left-16 search none-1155`}
+            >
+              <div className="j-center align-center">
+                <img
+                  src={files.search}
+                  alt="search-icon"
+                />
+              </div>
+              <Search hamburger={hamburger} />
+            </section>
+            <SearchData />
           </section>
         </section>
         <section
