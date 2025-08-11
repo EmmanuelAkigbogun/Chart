@@ -8,6 +8,7 @@ import DashBoard from "./Components/DashBoard";
 import "./index.css";
 import Chart from "./Components/Chart";
 import ChartA from "./Components/ChartA";
+import Search from "./Search";
 import Page from "./Components/Page";
 import { createContext, useState } from "react";
 import BarCharts from "./Components/BarCharts";
@@ -22,6 +23,7 @@ function App() {
     createRoutesFromElements(
       <Route>
         <Route element={<ChartA />} path="chartx"></Route>
+        <Route element={<Search />} path="se"></Route>
         <Route element={<BarCharts />} path="bar"></Route>
         <Route element={<Chart />} path="chart"></Route>
         <Route element={<DashBoard />} path="">
